@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <!-- Icons -->
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+   <!-- Scripts -->
+   <script src="https://editorrust.github.io/digit/main.js"></script>
+   <!-- Styles -->
+   <link rel="stylesheet" href="styles.css">
+
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Notes | This Office</title>
+</head>
+<body>
+   <div class="display">
+      <div class="note-sidebar">
+         <div class="menu">
+            <button onclick="openModal('newnote')" title="new note"><span class="material-symbols-rounded">add_notes</span></button>
+            <button onclick="openModal('settings')" title="settings"><span class="material-symbols-rounded">settings</span></button>
+            <!-- <span class="material-symbols-rounded">export_notes</span>
+            <span class="material-symbols-rounded">quick_reference</span> -->
+         </div>
+         <div class="note-list"></div>
+      </div>
+      <div class="active-note">
+         <div class="active-note-header">
+            <div contenteditable="true" class="note-name"></div>
+            <span class="material-symbols-rounded toggle-wordcount" title="Toggle word count" onclick="toggleWordCount()">tag</span>
+            <span class="material-symbols-rounded delete-note" title="Delete note">delete</span>
+         </div>
+         <div class="active-note-content">
+            <br>
+            <div contenteditable="true" class="note-text"></div>
+            <p class="note-last-edit"></p>
+            <br>
+            <p class="wordcount"></p>
+            <br>
+            <hr>
+            <br>
+            <div class="rendered-markdown markdown"></div>
+         </div>
+      </div>
+   </div>
+
+
+   <div class="modal modal-newnote">
+      <div class="modal-inner newnote">
+         <p class="close-modal" onclick="closeModal('newnote')">x</p>
+         <h1>New note</h1>
+         <hr>
+         <div class="modal-content">
+            <form class="new-note">
+               <input type="text" name="name" placeholder="note name"><br>
+               <input type="text" name="content" placeholder="note content"><br>
+               <button onclick="newNote()">create note</button>
+            </form>
+         </div>
+      </div>
+   </div>
+
+   <div class="modal modal-settings">
+      <div class="modal-inner settings">
+         <p class="close-modal" onclick="closeModal('settings')">x</p>
+         <h1>Settings</h1>
+         <hr>
+         <div class="modal-content">
+            <h2>Clear save</h2>
+            <p>Erase your save.</p>
+            <input class="exportdata" value="" type="text" style="display: none">
+            <button onclick="clearSave()">Clear save</button>
+            <br><br>
+            <h2>Export save</h2>
+            <p>Exports save in JSON format.</p>
+            <input class="exportdata" value="" type="text" style="display: none">
+            <button onclick="exportSave()">Export save</button>
+            <br><br>
+            <h2>Import save</h2>
+            <p>Imports a save.</p>
+            <button onclick="importSave()">Import save</button>
+            <br><br>
+            <h2>Change font</h2>
+            <p>Change the global font</p>
+            <button onclick="changeFont('serif')">Serif</button>
+            <button onclick="changeFont('sans-serif')">Sans Serif</button>
+            <button onclick="changeFont('cursive')">Cursive</button>
+            <button onclick="changeFont('monospace')">Monospace</button>
+         </div>
+      </div>
+   </div>
+</body>
+<script src="main.js"></script>
+</html>
