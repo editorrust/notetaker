@@ -18,6 +18,7 @@
          <div class="menu">
             <button onclick="openModal('newnote')" title="new note"><span class="material-symbols-rounded">add_notes</span></button>
             <button onclick="openModal('settings')" title="settings"><span class="material-symbols-rounded">settings</span></button>
+            <button onclick="openModal('info')" title="program info"><span class="material-symbols-rounded">info</span></button>
             <!-- <span class="material-symbols-rounded">export_notes</span>
             <span class="material-symbols-rounded">quick_reference</span> -->
          </div>
@@ -55,6 +56,31 @@
                <input type="text" name="content" placeholder="note content"><br>
                <button onclick="newNote()">create note</button>
             </form>
+         </div>
+      </div>
+   </div>
+
+   <div class="modal modal-info">
+      <div class="modal-inner info">
+         <p class="close-modal" onclick="closeModal('info')">x</p>
+         <h1>About Notes</h1>
+         <hr>
+         <div class="modal-content">
+            <h2>Notes</h2>
+            <p>A simple markdown notes program</p>
+            <br>
+            <h2>Citations</h2>
+            <p>Unordered list markdown code from https://chubakbidpaa.com/interesting/2021/09/28/regex-for-md.html - Thank you!</p>
+            <p>Some help from Google's Bard</p>
+            <p>Some help from GitHub CoPilot</p>
+            <br>
+            <h2>Version</h2>
+            <p></p>
+            <p>v0.2.0 -> more markdown, dark theme</p>
+            <p>v0.1.0 -> basic markdown, local save, create, edit, delete notes <i>- July 31 2023</i></p>
+            <br>
+            <i>Made by Hamza Nasher-Alneam</i>
+            <p>Last edit August 2 2023</p>
          </div>
       </div>
    </div>

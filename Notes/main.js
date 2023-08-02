@@ -110,6 +110,7 @@ function reloadNoteList() {
       return new Date(noteA.edits[noteA.edits.length - 1]) - new Date(noteB.edits[noteB.edits.length - 1]);
    });
 
+   document.querySelector(".note-list").innerHTML = "";
    notes.forEach(note => {
       addNoteToList(note);
    });
@@ -123,6 +124,7 @@ function addNoteToList(note) {
    
    name.classList.add("list-item-name");
    text.classList.add("list-item-text");
+   lastEdit.classList.add("list-item-last-edit");
       
    noteEl.classList.add("note-list-item");
    noteEl.id = "id-" + note.id;
@@ -130,7 +132,7 @@ function addNoteToList(note) {
    noteEl.onclick = () => { displayNote(note.id); }
 
    name.innerHTML = note.name;
-   text.innerHTML = note.text.length < 50 ? note.text : note.text.slice(0, 50) + "...";
+   text.innerHTML = note.text.length < 50 ? parseMarkdown(note.text).replace(/<br>/g, " ") : parseMarkdown(note.text.slice(0, 50)).replace(/<br>/g, " ") + "...";
    lastEdit.textContent = dateIs(note.edits[note.edits.length - 1], "quick");
       
    noteEl.append(name);
@@ -147,7 +149,7 @@ function displayNote(id) {
    let noteText = document.querySelector(".note-text");
 
    noteName.innerHTML = note.name;
-   noteText.innerHTML = note.text
+   noteText.innerHTML = note.text;
    document.querySelector(".note-last-edit").textContent = "last edit at " + timeIs(new Date(note.edits[note.edits.length - 1])) + " on " + dateIs(new Date(note.edits[note.edits.length - 1]), "quick");
    
    document.querySelector(".delete-note").onclick = () => { deleteNote(note.id); }
@@ -181,7 +183,7 @@ function displayNote(id) {
          notes[noteIndex].edits.push(now);
          
          let listItem = document.querySelector("#id-" + notes[noteIndex]["id"]);
-         listItem.querySelector(".list-item-" + data).innerHTML = note.text.length < 50 ? note.text : note.text.slice(0, 50) + "...";
+         listItem.querySelector(".list-item-" + data).innerHTML = note.text.length < 50 ? parseMarkdown(note.text).replace(/<br>/g, " ") : parseMarkdown(note.text.slice(0, 50)).replace(/<br>/g, " ") + "...";
          
          document.querySelector(".note-last-edit").textContent = "last edit at " + timeIs(now) + " on " + dateIs(now, "quick");
       }
@@ -210,7 +212,32 @@ function parseMarkdown(text) {
    // removing divs and formmating new lines
    result = result.replace(/<div>/g, "");
    result = result.replace(/<br>/g, "");
-   result = result.replace(/<\/div>/g, "<br>");
+   result = result.replace(/<\/div>/g, "\n");
+   // blockquote
+   result = result.replace(/(?:&gt;[\s\S]*?\n)+/gm, (fullMatch) => {
+      let blockquote = fullMatch.trim().replace(/&gt;/g, "");
+      return "<blockquote>" + blockquote + "</blockquote>";
+   });
+   // lists (unordered) - see citation
+   result = result.replace(/(\n\s*(\-|\+)\s.*)+/g, (fullMatch) => {
+      let items = "";
+      fullMatch.trim().split('\n').forEach( item => { items += "<li>" + item.substring(2) + "</li>"; } );
+      return "<ul>" + items + "</ul>";
+   });
+   // lists (ordered)
+   result = result.replace(/(\n\s*(\d+\.)\s.*)+/g, (fullMatch) => {
+      let items = "";
+      fullMatch.trim().split('\n').forEach( item => { items += "<li>" + item.substring(3) + "</li>"; } );
+      return "<ol>" + items + "</ol>";
+   });
+   // replace \n with <br>
+   result = result.replace(/\n/g, "<br>");
+   // replace &nbsp; with spaces
+   result = result.replace(/&nbsp;/g, " ");
+   // identify double spaces
+   result = result.replace(/\s\s/g, "<br>");
+   // identify code blocks
+   result = result.replace(/```<br>(.*?)```/g, "<code>$1</code>");
    // bold
    result = result.replace(/\*\*([^\*]+)\*\*/g, "<b>$1</b>");
    // italics
@@ -223,6 +250,8 @@ function parseMarkdown(text) {
    result = result.replace(/\~~(.*?)~~/gm, "<s>$1</s>");
    // subscript
    result = result.replace(/\~(.*?)~/gm, "<sub>$1</sub>");
+   // links
+   result = result.replace(/\[(.*?)\]\((.*?)\)/g, "<a href='$2' title='$2'>$1</a>");
    // headers
    result = result.replace(/###### (.*?)(?:<br>|$)/gm, "<h6>$1</h6>");
    result = result.replace(/##### (.*?)(?:<br>|$)/gm, "<h5>$1</h5>");
@@ -230,6 +259,8 @@ function parseMarkdown(text) {
    result = result.replace(/### (.*?)(?:<br>|$)/gm, "<h3>$1</h3>");
    result = result.replace(/## (.*?)(?:<br>|$)/gm, "<h2>$1</h2>");
    result = result.replace(/# (.*?)(?:<br>|$)/gm, "<h1>$1</h1>");
+   // horizontal rule
+   result = result.replace(/---/g, "<hr>");
 
    return result;
 }
@@ -278,5 +309,5 @@ function closeModal(modal) {
 }
 
 function changeFont(font) {
-   document.documentElement.style.setProperty("font-family", font);
+   document.querySelector(":root").style.setProperty("--font-family", font);
 }

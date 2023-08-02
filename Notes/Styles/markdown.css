@@ -1,0 +1,30 @@
+/* Markdown styling for the notes */
+
+.markdown h1 { font-size: 1.6em; }
+.markdown h2 { font-size: 1.5em; }
+.markdown h3 { font-size: 1.4em; }
+.markdown h4 { font-size: 1.3em; }
+.markdown h5 { font-size: 1.2em; }
+.markdown h6 { font-size: 1.1em; }
+
+.markdown ul, .markdown ol {
+   margin: .2em 0;
+   padding-left: 1em;
+}
+
+.markdown code {
+   display: block;
+   padding: .4em .6em;
+   background-color: var(--darkest-background);
+   /* background-color: #222;
+   color: #fcb557; */
+   border-radius: .3em;
+}
+
+.markdown blockquote {
+   display: block;
+   padding: .4em .6em;
+   background-color: var(--darkest-background);
+   border-left: solid .3em var(--menu-color);
+   border-radius: .3em;
+}
