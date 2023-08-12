@@ -1,0 +1,35 @@
+{
+  "name": "thisoffice",
+  "version": "0.2.1",
+  "description": "Office work tools",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "watch-tailwind": "npx tailwindcss -i ./styles/tailwind.config.css -o ./styles/main.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/editorrust/thisoffice.git"
+  },
+  "author": "Hamza Nasher-Alneam",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/editorrust/thisoffice/issues"
+  },
+  "homepage": "https://github.com/editorrust/thisoffice#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "body-parser": "^1.20.2",
+    "cookie-parser": "^1.4.6",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "mongoose": "^7.4.2",
+    "nodemailer": "^6.9.4",
+    "serve-favicon": "^2.5.0",
+    "tailwind": "^4.0.0",
+    "uuid": "^9.0.0",
+    "vue": "^3.3.4"
+  }
+}

@@ -56,6 +56,10 @@ input {
    background-color: var(--darkest-background);
 }
 
+.notebook-list {
+   list-style-type: none;
+}
+
 
 /* Main block styling */
 
@@ -87,7 +91,7 @@ input {
    margin: 0 auto;
 }
 
-.note-name:focus, .note-text:focus {
+.note-name:focus, .note-content:focus {
    outline: none;
 }
 
@@ -98,7 +102,7 @@ input {
    font-size: 2em;
 }
 
-.note-text {
+.note-content {
    width: 100%;
    min-height: 3em;
    display: inline-block;
@@ -137,9 +141,12 @@ input {
 }
 
 .menu {
+   background-color: var(--darkest-background);
+}
+
+.menu-buttons {
    display: flex;
    justify-content: center;
-   background-color: var(--darkest-background);
 }
 
 .note-sidebar button {

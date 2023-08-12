@@ -6,23 +6,33 @@
    <!-- Scripts -->
    <script src="https://editorrust.github.io/digit/main.js"></script>
    <!-- Styles -->
+   <link rel="stylesheet" href="Styles/main.css">
    <link rel="stylesheet" href="Styles/styles.css">
    <link rel="stylesheet" href="Styles/modal.css">
    <link rel="stylesheet" href="Styles/markdown.css">
 
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script> 
+
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Notes | This Office</title>
+   <title>🗒️ Notes | This Office</title>
 </head>
 <body>
    <div class="display">
       <div class="note-sidebar">
          <div class="menu">
-            <button onclick="openModal('newnote')" title="new note"><span class="material-symbols-rounded">add_notes</span></button>
-            <button onclick="openModal('settings')" title="settings"><span class="material-symbols-rounded">settings</span></button>
-            <button onclick="openModal('info')" title="program info"><span class="material-symbols-rounded">info</span></button>
-            <!-- <span class="material-symbols-rounded">export_notes</span>
-            <span class="material-symbols-rounded">quick_reference</span> -->
+            <div class="menu-buttons">
+               <button onclick="newNote()" title="new note"><span class="material-symbols-rounded">note_stack_add</span></button>
+               <button onclick="openModal('newnotebook')" title="new notebook"><span class="material-symbols-rounded">create_new_folder</span></button>
+               <button onclick="openModal('settings')" title="settings"><span class="material-symbols-rounded">settings</span></button>
+               <button onclick="openModal('info')" title="program info"><span class="material-symbols-rounded">info</span></button>   
+            </div>
+            <hr>
+            <details class="m-2 -mb-4 p-2 rounded-md bg-white dark:bg-gray-900">
+               <summary class="font-semibold">Notebooks</summary>
+               <div class="notebook-list"></div>
+            </details>
+            <br>
          </div>
          <div class="note-list"></div>
       </div>
@@ -34,7 +44,7 @@
          </div>
          <div class="active-note-content">
             <br>
-            <div contenteditable="true" class="note-text"></div>
+            <div contenteditable="true" class="note-content"></div>
             <p class="note-last-edit"></p>
             <br>
             <p class="wordcount"></p>
@@ -46,17 +56,15 @@
       </div>
    </div>
 
-
-   <div class="modal modal-newnote">
-      <div class="modal-inner newnote">
-         <p class="close-modal" onclick="closeModal('newnote')">x</p>
-         <h1>New note</h1>
+   <div class="modal modal-newnotebook">
+      <div class="modal-inner newnotebook">
+         <p class="close-modal" onclick="closeModal('newnotebook')">x</p>
+         <h1>New notebook</h1>
          <hr>
          <div class="modal-content">
-            <form class="new-note">
-               <input type="text" name="name" placeholder="note name"><br>
-               <input type="text" name="content" placeholder="note content"><br>
-               <button onclick="newNote()">create note</button>
+            <form class="new-notebook">
+               <input type="text" name="name" placeholder="notebook name"><br>
+               <button onclick="newNotebook()">create notebook</button>
             </form>
          </div>
       </div>
@@ -78,12 +86,13 @@
             <br>
             <h2>Version</h2>
             <p></p>
-            <p>v0.2.1 -> linked forgotton stylsheets</p>
-            <p>v0.2.0 -> more markdown, dark theme</p>
+            <p>v0.3.0 -> notebooks, accounts, remote save <i>- Aug 12 2023</i></p>
+            <p>v0.2.1 -> linked forgotten stylsheets <i>- Aug 2 2023</i></p>
+            <p>v0.2.0 -> more markdown, dark theme <i>- Aug 2 2023</i></p>
             <p>v0.1.0 -> basic markdown, local save, create, edit, delete notes <i>- July 31 2023</i></p>
             <br>
             <i>Made by Hamza Nasher-Alneam</i>
-            <p>Last edit August 2 2023</p>
+            <p>Last edit August 12 2023</p>
          </div>
       </div>
    </div>
@@ -94,7 +103,7 @@
          <h1>Settings</h1>
          <hr>
          <div class="modal-content">
-            <h2>Clear save</h2>
+            <!-- <h2>Clear save</h2>
             <p>Erase your save.</p>
             <input class="exportdata" value="" type="text" style="display: none">
             <button onclick="clearSave()">Clear save</button>
@@ -107,7 +116,7 @@
             <h2>Import save</h2>
             <p>Imports a save.</p>
             <button onclick="importSave()">Import save</button>
-            <br><br>
+            <br><br> -->
             <h2>Change font</h2>
             <p>Change the global font</p>
             <button onclick="changeFont('serif')">Serif</button>
@@ -118,5 +127,6 @@
       </div>
    </div>
 </body>
-<script src="main.js"></script>
+<script src="scripts/main.js"></script>
+<script src="scripts/markdown.js"></script>
 </html>
