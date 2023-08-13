@@ -151,13 +151,28 @@ async function deleteNote(id) {
    showLatestNote();
 }
 
+// Get note name from id
+function getNoteName(noteid) {
+   let noteIndex = notes.findIndex(note => note.id == noteid);
+   if (noteIndex != -1) return notes[noteIndex].name;
+   else return "error - note does not exist";
+}
+
 // Open note
-function openNote(id) {
-   let note = notes.find(note => note.id == id);
+function tryOpenNote(id) {
    let noteIndex = notes.findIndex(note => note.id == id);
+   if (noteIndex != -1) openNote(id);
+}
+
+function openNote(id) {
+   let noteIndex = notes.findIndex(note => note.id == id);
+   let note = notes[noteIndex];
 
    let noteName = document.querySelector(".note-name");
    let noteText = document.querySelector(".note-content");
+   let noteId = document.querySelector(".note-id");
+
+   noteId.textContent = note.id;
 
    // Display note values
    noteName.innerHTML = note.name;
@@ -318,6 +333,11 @@ function getWordCount(text) {
    // Get a list of words
    let words = text.split(" ").filter(word => { return word.length > 0 });
    return words.length + " words - " + charCount + " characters";
+}
+
+function copyNoteId() {
+   let noteId = document.querySelector(".note-id");
+   navigator.clipboard.writeText(noteId.textContent).catch((err) => {console.log(err); });
 }
 
 function toggleWordCount() {

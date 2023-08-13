@@ -39,16 +39,18 @@
       <div class="active-note">
          <div class="active-note-header">
             <div contenteditable="true" class="note-name"></div>
+            <span class="material-symbols-rounded copynoteid" title="Copy note id" onclick="copyNoteId()">integration_instructions</span>
             <span class="material-symbols-rounded toggle-wordcount" title="Toggle word count" onclick="toggleWordCount()">tag</span>
             <span class="material-symbols-rounded delete-note" title="Delete note">delete</span>
          </div>
          <div class="active-note-content">
+            <span class="note-id hidden"></span>
             <br>
             <div contenteditable="true" class="note-content"></div>
-            <p class="note-last-edit"></p>
-            <br>
-            <p class="wordcount"></p>
-            <br>
+            <div class="my-2 py-2 px-4 rounded-md bg-gray-50 dark:bg-gray-700">
+               <p class="note-last-edit"></p>
+               <p class="wordcount"></p>
+            </div>
             <hr>
             <br>
             <div class="rendered-markdown markdown"></div>
@@ -86,13 +88,14 @@
             <br>
             <h2>Version</h2>
             <p></p>
+            <p>v0.4.0 -> image links, links to other notes <i>- Aug 13 2023</i></p>
             <p>v0.3.0 -> notebooks, accounts, remote save <i>- Aug 12 2023</i></p>
             <p>v0.2.1 -> linked forgotten stylsheets <i>- Aug 2 2023</i></p>
             <p>v0.2.0 -> more markdown, dark theme <i>- Aug 2 2023</i></p>
             <p>v0.1.0 -> basic markdown, local save, create, edit, delete notes <i>- July 31 2023</i></p>
             <br>
             <i>Made by Hamza Nasher-Alneam</i>
-            <p>Last edit August 12 2023</p>
+            <p>Last edit August 13 2023</p>
          </div>
       </div>
    </div>

@@ -22,7 +22,6 @@ $("#signup-from-homepage").submit(function(event) {
       pscd: this.pscd.value,
    }).done(function(data) {
       document.querySelector(".signup-text").textContent = data;
-      if (data == "Success!") { location.reload(); }
    });
 });
 </script>

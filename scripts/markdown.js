@@ -12,6 +12,11 @@ function parseMarkdown(text) {
    result = result.replace(/<div>/g, "");
    result = result.replace(/<br>/g, "");
    result = result.replace(/<\/div>/g, "\n");
+   // links to other notes
+   result = result.replace(/\[\[(.*?)\]\]/g, (match, inner) => {
+      let noteid = inner.replace(/<\/span>/g, "").replace(/<span(.*?)>/g, "");
+      return `<span class='underline text-orange-500' id='id-${noteid}' onclick='tryOpenNote("${noteid}")' title='${noteid}'>${getNoteName(noteid)}</span>`;
+   });
    // blockquote
    result = result.replace(/(?:&gt;[\s\S]*?\n)+/gm, (fullMatch) => {
       let blockquote = fullMatch.trim().replace(/&gt;/g, "");
@@ -63,6 +68,8 @@ function parseMarkdown(text) {
    result = result.replace(/\~~(.*?)~~/gm, "<s>$1</s>");
    // subscript
    result = result.replace(/\~(.*?)~/gm, "<sub>$1</sub>");
+   // images
+   result = result.replace(/!\[(.*?)\]\((.*?)\)/g, "<img src='$2' alt='$1' title='$1'>");
    // links
    result = result.replace(/\[(.*?)\]\((.*?)\)/g, "<a class='underline text-blue-700' href='$2' title='$2'>$1</a>");
    // headers

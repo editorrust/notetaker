@@ -109,11 +109,17 @@ input {
    font-size: 1.1em;
 }
 
+.note-content * {
+   white-space: pre-wrap;
+   word-break: break-all;
+   overflow-wrap: break-word;
+}
+
 .note-last-edit {
    color: var(--font-color-lighter);
 }
 
-.delete-note, .toggle-wordcount {
+.delete-note, .toggle-wordcount, .copynoteid {
    position: absolute;
    top: 0;
    right: 0;
@@ -125,11 +131,21 @@ input {
    border-radius: 50em;
    background-color: #F35040;
    box-sizing: border-box;
+   transition: .1s;
+}
+
+.delete-note:active, .toggle-wordcount:active, .copynoteid:active {
+   transform: scale(.9);
 }
 
 .toggle-wordcount {
-   background-color: cornflowerblue;
+   background-color: #6495ed;
    right: 2.2em;
+}
+
+.copynoteid {
+   background-color: #4acb84;
+   right: 4.4em;
 }
 
 

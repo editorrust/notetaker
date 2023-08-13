@@ -104,6 +104,7 @@ function signIn(user) {
 ================== */
 
 app.get("/note-create", (req, res) => {
+   if (!signedin) { res.render("partials/signedOut"); return; }
    let notebookid = decodeURIComponent(req.query.notebookid);
    Users.findById(currentuser._id).then(user => {
       let notebookIndex = user.notebooks.findIndex(notebook => notebook.id == notebookid);
@@ -126,6 +127,7 @@ app.get("/note-create", (req, res) => {
 
 
 app.post("/note-delete", (req, res) => {
+   if (!signedin) { res.render("partials/signedOut"); return; }
    Users.findById(currentuser._id).then(user => {
       let notebookIndex = user.notebooks.findIndex(notebook => notebook.id == req.body.notebookid);
       let noteIndex = user.notebooks[notebookIndex].notes.findIndex(note => note.id == req.body.id);
@@ -141,6 +143,7 @@ app.post("/note-delete", (req, res) => {
 });
 
 app.post("/note-edit", (req, res) => {
+   if (!signedin) { res.render("partials/signedOut"); return; }
    let notebookid = req.body.notebookid;
    Users.findById(currentuser._id).then(user => {
       let notebookIndex = user.notebooks.findIndex(notebook => notebook.id == notebookid);
@@ -275,8 +278,8 @@ app.post("/user/create", (req, res) => {
                   );
                   // Sign in and go home
                   signIn(newUser);
-                  createNotebook("Starter notebook");
                   res.send("Success!");
+                  res.redirect(`/newnotebook?name=${encodeURIComponent("Starter notebook")}`)
                })
             }
          }
@@ -301,7 +304,7 @@ const transporter = nodemailer.createTransport({
    service: "gmail",
    auth: {
       user: "vegetabledash@gmail.com",
-      pass: "rgagablxdefsiymr"
+      pass: process.env.EMAIL_PASSWORD
   }
 });
 
