@@ -8,10 +8,13 @@ const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
 const { v4: uuidv4 } = require("uuid");
+const dotenv = require('dotenv');
 
 const app = express();
 const port = process.env.PORT || 3000;
 const connection = mongoose.connection;
+
+dotenv.config();
 
 const saltRounds = 12;
 
