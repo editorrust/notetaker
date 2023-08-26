@@ -216,7 +216,12 @@ app.get("/getnotebooks", (req, res) => {
    Users.findOne(
       { userid: currentuser.userid }
    ).then((user) => {
-      res.send(user.notebooks);
+      let notebookids = [];
+      user.notebooks.forEach(notebook => { notebookids.push({
+         id: notebook.id,
+         title: notebook.title
+      }); });
+      res.send(notebookids);
    }).catch((err) => { console.error(err); });
 });
 
