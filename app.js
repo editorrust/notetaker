@@ -40,6 +40,7 @@ const userSchema = new mongoose.Schema({
    userid: String,
    email: String,
    password: String,
+   settings: Object,
    dateCreated: Date,
    notebooks: Array
 });
@@ -64,20 +65,13 @@ function getNewpageData() {
 
 
 /* ==================
-// Get requests
+// Pages
 ================== */
-
-// Public user pages
 
 app.get("/", (req, res) => { 
    if (!signedin) { res.render("partials/signedOut"); return; }
-   res.render("home", { user: currentuser });
-});
-app.get("/notes", (req, res) => {
-   if (!signedin) { res.render("partials/signedOut"); return; }
    res.render("notes", { user: currentuser });
 });
-
 
 
 /* ==================
@@ -216,6 +210,7 @@ app.get("/getnotebooks", (req, res) => {
    Users.findOne(
       { userid: currentuser.userid }
    ).then((user) => {
+      console.log(currentuser.userid, user)
       let notebookids = [];
       user.notebooks.forEach(notebook => { notebookids.push({
          id: notebook.id,
@@ -344,4 +339,4 @@ app.listen(port);
 
 
 // Auto sign in me
-Users.findOne({ email: "hnasheralneam@gmail.com" }).then((user) => { signIn(user); });
+// Users.findOne({ email: "hnasheralneam@gmail.com" }).then((user) => { signIn(user); });

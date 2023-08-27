@@ -1,6 +1,27 @@
 let notebooks = [];
-let currentNotebook = "not set";
 let notes = [];
+let initSettings = {
+   autocomplete: {
+      parentheses: true,
+      brackets: true,
+      braces: true
+   },
+   activeNotebook: "not set",
+   font: "serif"
+}
+let settings = {}
+
+if (localStorage.getItem("notetakersettings")) {
+   settings = JSON.parse(localStorage.getItem("notetakersettings"));
+} else settings = initSettings;
+
+function saveSettings() {
+   localStorage.setItem("notetakersettings", JSON.stringify(settings));
+}
+
+// Add items new to local save
+const initSettingsKeys = Object.keys(initSettings);
+for (key of initSettingsKeys) { if (settings[key] === undefined) { settings[key] = initSettings[key]; } }
 
 // =========================================
 // Load page
@@ -10,11 +31,12 @@ getData();
 
 async function getData() {
    await getNotebooks();
-   if (currentNotebook == "not set") {
-      currentNotebook = notebooks[0].id;
+   if (settings.activeNotebook == "not set") {
+      settings.activeNotebook = notebooks[0].id;
+      saveSettings();
    }
    updateNotebookList();
-   await getNotes(currentNotebook);
+   await getNotes(settings.activeNotebook);
 
    showLatestNote();
 }
@@ -109,7 +131,7 @@ async function newNote() {
    let note = {};
 
    try {
-      const response = await fetch(`/note-create?notebookid=${encodeURIComponent(currentNotebook)}`);
+      const response = await fetch(`/note-create?notebookid=${encodeURIComponent(settings.activeNotebook)}`);
       const returedData = await response.json();
       note = returedData.note;
    }
@@ -128,7 +150,7 @@ document.querySelector(".note-content").addEventListener("keyup", () => {
 
 async function updateNote(id, type, data) {
    let changes = {
-      notebookid: currentNotebook,
+      notebookid: settings.activeNotebook,
       id: id,
       type: type,
       change: data
@@ -139,7 +161,7 @@ async function updateNote(id, type, data) {
 
 async function deleteNote(id) {
    $.post("/note-delete", {
-      notebookid: currentNotebook,
+      notebookid: settings.activeNotebook,
       id: id,
    });
 
@@ -235,7 +257,8 @@ async function newNotebook() {
    try {
       const response = await fetch(`/newnotebook?name=${encodeURIComponent(name)}`);
       const notebook = await response.json();
-      currentNotebook = notebook.id;
+      settings.activeNotebook = notebook.id;
+      saveSettings();
       getData();
    }
    catch (error) {
@@ -246,7 +269,8 @@ async function newNotebook() {
 }
 
 function openNotebook(id) {
-   currentNotebook = id;
+   settings.activeNotebook = id;
+   saveSettings();
    getData();
 }
 
@@ -258,10 +282,21 @@ async function deleteNotebook(id) {
    const notebook = await response.json();
 
    await getNotebooks();
-   if (currentNotebook == "not set" || currentNotebook == id) {
-      currentNotebook = notebooks[0].id;
+   if (settings.activeNotebook == "not set" || settings.activeNotebook == id) {
+      settings.activeNotebook = notebooks[0].id;
+      saveSettings();
    }
-   updateNotebookList();   
+   updateNotebookList();
+}
+
+function toggleNotebookSwitcher() {
+   let switcher = document.querySelector(".notebook-switcher");
+   if (switcher.style.display == "block") {
+      switcher.style.display = "none";
+   }
+   else {
+      switcher.style.display = "block";
+   }
 }
 
 
@@ -284,8 +319,8 @@ function updateNotebookList() {
    document.querySelector(".notebook-list").innerHTML = "";
    notebooks.forEach(notebook => {
       document.querySelector(".notebook-list").innerHTML += `
-         <li class="notebook-list-item my-1.5 py-2 px-4 rounded-md ${notebook.id == currentNotebook ? "bg-gray-200" : "bg-gray-100"} cursor-pointer" onclick="openNotebook('${notebook.id}')">
-            <span class="material-symbols-rounded -ml-2 p-1">folder${notebook.id == currentNotebook ? "_special" : ""}</span>
+         <li class="notebook-list-item my-1.5 py-2 px-4 rounded-md ${notebook.id == settings.activeNotebook ? "bg-greyplus-lightest dark:bg-greyplus-night" : "bg-greyplus-darkerwhite dark:bg-greyplus-darkblack"} cursor-pointer" onclick="openNotebook('${notebook.id}')">
+            <span class="material-symbols-rounded -ml-2 p-1">folder${notebook.id == settings.activeNotebook ? "_special" : ""}</span>
             ${notebook.title}
             ${notebooks.length > 1 ? `<span class="material-symbols-rounded -mr-2 p-1 rounded-lg bg-red-500 text-white float-right" title="delete notebook" onclick="deleteNotebook('${notebook.id}')">folder_delete</span>` : "" }
          </li>
@@ -337,7 +372,7 @@ function getWordCount(text) {
 
 function copyNoteId() {
    let noteId = document.querySelector(".note-id");
-   navigator.clipboard.writeText(noteId.textContent).catch((err) => {console.log(err); });
+   notify(noteId.textContent, "note id");
 }
 
 function toggleWordCount() {
@@ -366,6 +401,44 @@ function closeModal(modal) {
    document.querySelector(`.modal-${modal}`).classList.remove("modal-open");
 }
 
+function notify(txt, alertTxt) {
+   navigator.clipboard.writeText(txt).then(() => {
+       console.log("Copied!");
+   }, () => { console.log("Error copying."); });
+   let alert = document.createElement("DIV");
+   alert.textContent = `Copied ${alertTxt}!`;
+   alert.classList.add("tempAlert");
+   document.body.appendChild(alert);
+   setTimeout(() => {
+      alert.style.opacity = "1";
+      alert.style.bottom = ".5rem";
+   }, 200);
+   setTimeout(() => {
+      alert.style.opacity = "0";
+      alert.style.bottom = "-10rem";
+   }, 4200);
+   setTimeout(() => {
+      alert.remove();
+   }, 4400);
+
+}
+
+// Settings
+
+if (!settings.autocomplete.parentheses) document.querySelector("#autocomplete-parentheses").checked = false;
+if (!settings.autocomplete.brackets) document.querySelector("#autocomplete-brackets").checked = false;
+if (!settings.autocomplete.braces) document.querySelector("#autocomplete-braces").checked = false;
+
+document.querySelector(":root").style.setProperty("--font-family", settings.font);
+
+
 function changeFont(font) {
    document.querySelector(":root").style.setProperty("--font-family", font);
+   settings.font = font;
+   saveSettings();
+}
+
+function autobracketToggled(type) {
+   settings.autocomplete[type] = !settings.autocomplete[type];
+   saveSettings();
 }

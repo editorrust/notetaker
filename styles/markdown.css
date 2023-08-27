@@ -21,6 +21,18 @@
    border-radius: .3em;
 }
 
+.markdown code * {
+   font-family: monospace;
+}
+
+.markdown code.inline-code {
+   display: inline-block;
+   padding: .1em .4em;
+   background-color: var(--darkest-background);
+   border-radius: .3em;
+   font-size: 90%;
+}
+
 .markdown blockquote {
    display: block;
    padding: .4em .6em;
@@ -29,29 +41,35 @@
    border-radius: .3em;
 }
 
+.markdown hr {
+   margin: 1em 0;
+   height: .1em;
+   background-color: #aaa;
+}
+
 /* Checklist */
 
-.todo-item {
+.markdown .todo-item {
    display: flex;
    align-items: center;
    justify-content: space-between;
 }
 
- .todo-item span {
+.markdown  .todo-item span {
    flex-grow: 1;
    margin: 2px 10px;
    font-size: 22px;
 }
 
-.done span {
+.markdown .done span {
    text-decoration: line-through;
 }
 
-input[type="checkbox"] {
+.markdown input[type="checkbox"] {
    display: none;
 }
 
-.tick {
+.markdown .tick {
    width: 15px;
    height: 15px;
    border: 2px solid #222;
@@ -62,12 +80,12 @@ input[type="checkbox"] {
    cursor: pointer;
 }
 
-.tick::before {
+.markdown .tick::before {
    content: "✔️";
    font-size: 10px;
    opacity: 0;
 }
 
-.done .tick::before {
+.markdown .done .tick::before {
    opacity: 1;
 }

@@ -11,27 +11,29 @@
    <link rel="stylesheet" href="Styles/modal.css">
    <link rel="stylesheet" href="Styles/markdown.css">
 
+   <!-- JQuery :( -->
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script> 
 
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>🗒️ Notes | This Office</title>
+   <meta name="theme-color" content="#fecdd3">
+   <title>🗒️ Notetaker</title>
 </head>
 <body>
    <div class="display">
       <div class="note-sidebar">
          <div class="menu">
             <div class="menu-buttons">
-               <button onclick="newNote()" title="new note"><span class="material-symbols-rounded">note_stack_add</span></button>
+               <button onclick="newNote()" class="rounded-tr-2xl rounded-tl-full rounded-bl-full" title="new note"><span class="material-symbols-rounded">note_stack_add</span></button>
+               <button onclick="toggleNotebookSwitcher()" title="change active notebook"><span class="material-symbols-rounded">folder_managed</span></button>
                <button onclick="openModal('newnotebook')" title="new notebook"><span class="material-symbols-rounded">create_new_folder</span></button>
                <button onclick="openModal('settings')" title="settings"><span class="material-symbols-rounded">settings</span></button>
-               <button onclick="openModal('info')" title="program info"><span class="material-symbols-rounded">info</span></button>   
+               <button onclick="openModal('info')" class="rounded-tl-sm rounded-tr-full rounded-br-full" title="program info"><span class="material-symbols-rounded">info</span></button>
             </div>
-            <hr>
-            <details class="m-2 -mb-4 p-2 rounded-md bg-white dark:bg-gray-900">
-               <summary class="font-semibold">Notebooks</summary>
+            <div class="notebook-switcher hidden m-2 -mb-4 p-2 rounded-md bg-greyplus-darkwhite dark:bg-greyplus-tar">
+               <h2 class="font-semibold ml-1">Notebooks</h2>
                <div class="notebook-list"></div>
-            </details>
+            </div>
             <br>
          </div>
          <div class="note-list"></div>
@@ -65,7 +67,7 @@
          <hr>
          <div class="modal-content">
             <form class="new-notebook">
-               <input type="text" name="name" placeholder="notebook name"><br>
+               <input class="notebooknameinput" type="text" name="name" placeholder="notebook name"><br>
                <button onclick="newNotebook()">create notebook</button>
             </form>
          </div>
@@ -80,11 +82,13 @@
          <div class="modal-content">
             <h2>Notes</h2>
             <p>A simple markdown notes program</p>
+            <p>The security for this app is terrible. The notes are stored in plaintext, so I can see them, and I occasionally leak the database password, so pontentially everyone could see them.</p>
             <br>
             <h2>Citations</h2>
             <p>Unordered list markdown code from https://chubakbidpaa.com/interesting/2021/09/28/regex-for-md.html - Thank you!</p>
             <p>Some help from Google's Bard</p>
             <p>Some help from GitHub CoPilot</p>
+            <p>A bit of help from OpenAI's ChatGPT</p>
             <br>
             <h2>Version</h2>
             <p></p>
@@ -122,6 +126,20 @@
             <p>Imports a save.</p>
             <button onclick="importSave()">Import save</button>
             <br><br> -->
+            <h2>Auto completion</h2>
+            <div class="my-2">
+               <input onclick="autobracketToggled('parentheses')" checked type="checkbox" class="toggle float-right" id="autocomplete-parentheses" name="parentheses">
+               <label for="parentheses">Parentheses ()</label><br>
+            </div>
+            <div class="my-2">
+               <input onclick="autobracketToggled('brackets')" checked type="checkbox" class="toggle float-right" id="autocomplete-brackets" name="brackets">
+               <label for="brackets">Brackets []</label><br>
+            </div>
+            <div class="my-2">
+               <input onclick="autobracketToggled('braces')" checked type="checkbox" class="toggle float-right" id="autocomplete-braces" name="braces">
+               <label for="braces">Braces {}</label><br>
+            </div>
+            <br>
             <h2>Change font</h2>
             <p>Change the global font</p>
             <button onclick="changeFont('serif')">Serif</button>

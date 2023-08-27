@@ -47,7 +47,7 @@ button:hover {
    background-color: var(--button-color-hover);
 }
 
-input {
+.notebooknameinput {
    width: 100%;
    padding: .3em .5em;
    margin: .2em 0;
@@ -74,12 +74,17 @@ input {
 /* Active note */
 
 .active-note {
+   padding-top: 3.5em;
    max-height: 100vh;
    overflow: scroll;
    background-color: var(--active-note-bgc);
 }
 
 .active-note-header {
+   position: absolute;
+   top: 0;
+   right: 0;
+   width: 70%;
    padding: .4em 1em;
    background-color: var(--menu-color);
    border-bottom: solid .15em var(--menu-border-color);
@@ -156,7 +161,7 @@ input {
    border-right: solid .15em var(--menu-border-color);
 }
 
-.menu {
+.menu-buttons {
    background-color: var(--darkest-background);
 }
 
@@ -166,12 +171,11 @@ input {
 }
 
 .note-sidebar button {
-   padding: .6em .7em .5em .7em;
+   padding: .6em .7em .3em .7em;
    margin: .2em .1em;
    border: none;
    background-color: var(--button-color);
    box-sizing: content-box;
-   border-radius: .4em;
    transition: .1s;
 }
 
@@ -211,4 +215,79 @@ input {
 
 .settings button:hover {
    background-color: var(--button-color-hover);
+}
+
+/* Notification */
+.tempAlert {
+   position: fixed;
+   bottom: -10rem;
+   right: .5rem;
+   transition: .2s;
+   opacity: 0;
+   background-color: #222;
+   color: #eee;
+   font-family: monospace;
+   font-size: 1rem;
+   padding: .5rem 1rem;
+   border-radius: 2rem;
+}
+
+@media (prefers-color-scheme: dark) {
+   body {
+      background-color: #232326;
+      color: #ddd;
+   }
+   .tempAlert {
+      background-color: #FEFDFA;
+      color: #222;
+   }
+}
+
+
+/* Toggles */
+
+.toggle {
+   -webkit-appearance: none;
+   -moz-appearance: none;
+   appearance: none;
+   width: 62px;
+   height: 32px;
+   display: inline-block;
+   position: relative;
+   border-radius: 2em;
+   overflow: hidden;
+   outline: none;
+   border: none;
+   background-color: #707070;
+   transition: background-color ease 0.2s;
+}
+
+.toggle:before {
+   content: "on off";
+   display: block;
+   position: absolute;
+   z-index: 2;
+   width: 28px;
+   height: 28px;
+   background: #fff;
+   left: 2px;
+   top: 2px;
+   border-radius: 50%;
+   font: 10px/28px sans-serif;
+   text-transform: uppercase;
+   font-weight: bold;
+   text-indent: -22px;
+   word-spacing: 37px;
+   color: #fff;
+   white-space: nowrap;
+   box-shadow: 0 1px 2px #00000033;
+   transition: all 0.2s;
+}
+
+.toggle:checked {
+   background-color: #4CD964;
+}
+
+.toggle:checked:before {
+   left: 32px;
 }

@@ -1,3 +1,84 @@
+document.querySelector(".note-content").addEventListener("keypress", function (e) {
+   if (settings.autocomplete.parentheses && e.key === "(") {
+      event.preventDefault();
+      insertAtCursor("(");
+      insertAtCursor(")");
+      moveCursorBackOneChar();
+   }
+   if (settings.autocomplete.brackets && e.key === "[") {
+      event.preventDefault();
+      insertAtCursor("[");
+      insertAtCursor("]");
+      moveCursorBackOneChar();
+   }
+   if (settings.autocomplete.braces && e.key === "{") {
+      event.preventDefault();
+      insertAtCursor("{");
+      insertAtCursor("}");
+      moveCursorBackOneChar();
+   }
+
+
+   function moveCursorBackOneChar() {
+      var selection = window.getSelection();
+
+      if (selection.rangeCount > 0) {
+         var range = selection.getRangeAt(0);
+
+         range.setEnd(range.endContainer, range.endOffset - 1);
+
+         selection.removeAllRanges();
+         selection.addRange(range);
+      }
+   }
+
+   if (e.key === "Enter") {
+      let textField = this.innerText;
+      const cursorPosition = getSelectionStartEquiv(this);
+
+      // Gte last line
+      let lineStartPosition = cursorPosition;
+      while (lineStartPosition > 0 && textField.charAt(lineStartPosition - 1) !== '\n') {
+         lineStartPosition--;
+      }
+      let lineEndPosition = lineStartPosition;
+      while (lineEndPosition < textField.length && textField.charAt(lineEndPosition) !== '\n') {
+         lineEndPosition++;
+      }
+      const currentLineContent = textField.substring(lineEndPosition, lineStartPosition);
+
+      insertAtCursor("\n");
+      if (currentLineContent.startsWith("- [")) insertAtCursor("- [ ] ",);
+      else if (currentLineContent.startsWith("- ")) insertAtCursor("- ",);
+      event.preventDefault();
+   }
+
+   function insertAtCursor(text) {
+      selection = window.getSelection();
+
+      const range = selection.getRangeAt(0);
+      const newText = document.createTextNode(text);
+
+      range.deleteContents();
+      range.insertNode(newText);
+
+      range.setStartAfter(newText);
+   }
+
+   function getSelectionStartEquiv(element) {
+      const editableDiv = element;
+      const selection = window.getSelection();
+      if (selection.rangeCount > 0 && selection.anchorNode && editableDiv.contains(selection.anchorNode)) {
+         const range = selection.getRangeAt(0);
+         const precedingRange = document.createRange();
+         precedingRange.setStart(editableDiv, 0);
+         precedingRange.setEnd(range.startContainer, range.startOffset);
+         const selectionStartEquivalent = precedingRange.toString().length;
+         return selectionStartEquivalent;
+      }
+   }
+});
+
 function renderMarkdown() {
    let code = parseMarkdown(document.querySelector(".note-content").innerHTML);
    document.querySelector(".rendered-markdown").innerHTML = code;
@@ -26,7 +107,7 @@ function parseMarkdown(text) {
    result = result.replace(/(\n\s*(-|\[x\]|\[.\])\s.*)+/g, (fullMatch) => {
       let items = "";
       fullMatch.trim().split('\n').forEach( item => {
-         let checked = (item[2] === '[' && item[3] === 'x') ? "checked" : "unchecked";
+         let checked = (item[2] === "[" && item[3] === "x") ? "checked" : "unchecked";
          // console.log(checked, item[3])
 
          let id = crypto.randomUUID();
@@ -46,6 +127,8 @@ function parseMarkdown(text) {
       fullMatch.trim().split('\n').forEach( item => { items += "<li>" + item.substring(3) + "</li>"; } );
       return "<ol>" + items + "</ol>";
    });
+   // identify code lines
+   result = result.replace(/`([^\`].*?)`/g, "<code class='inline-code'>$1</code>");
    // replace \n with <br>
    result = result.replace(/\n/g, "<br>");
    // replace &nbsp; with spaces
@@ -61,7 +144,7 @@ function parseMarkdown(text) {
    // highlight
    result = result.replace(/\==(.*?)==/gm, "<mark>$1</mark>");
    // comment
-   result = result.replace(/\%%(.*?)%%/gm, "");
+   result = result.replace(/%%(.*?)%%/gm, "");
    // superscript
    result = result.replace(/\^(.*?)\^/gm, "<sup>$1</sup>");
    // strikethrough

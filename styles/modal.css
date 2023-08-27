@@ -35,6 +35,10 @@
    margin: 1.5em;
 }
 
+.modal-content h2 {
+   font-weight: 700;
+}
+
 .modal-open {
    pointer-events: auto;
    opacity: 1;
