@@ -63,6 +63,8 @@ function getNewpageData() {
    }).catch((err) => { console.error(err); });
 }
 
+getNewpageData();
+
 
 /* ==================
 // Pages
@@ -93,6 +95,7 @@ function signOut() {
 function signIn(user) {
    signedin = true;
    currentuser = user;
+   console.log("Just signed in: ", user)
 }
 
 
@@ -210,7 +213,6 @@ app.get("/getnotebooks", (req, res) => {
    Users.findOne(
       { userid: currentuser.userid }
    ).then((user) => {
-      console.log(currentuser.userid, user)
       let notebookids = [];
       user.notebooks.forEach(notebook => { notebookids.push({
          id: notebook.id,
@@ -339,4 +341,4 @@ app.listen(port);
 
 
 // Auto sign in me
-// Users.findOne({ email: "hnasheralneam@gmail.com" }).then((user) => { signIn(user); });
+Users.findOne({ email: "hnasheralneam@gmail.com" }).then((user) => { signIn(user); });

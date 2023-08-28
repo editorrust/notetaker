@@ -1,13 +1,16 @@
 let notebooks = [];
 let notes = [];
 let initSettings = {
+   search: {
+      caseSensitive: false
+   },
    autocomplete: {
       parentheses: true,
       brackets: true,
       braces: true
    },
    activeNotebook: "not set",
-   font: "serif"
+   font: "'EB Garamond', serif"
 }
 let settings = {}
 
@@ -393,6 +396,25 @@ function uid() {
    // return id;
 }
 
+window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", ({ matches }) => {
+   if (matches) {
+      // changed to dark mode
+      let metaThemeColor = document.querySelector("meta[name=theme-color]");
+      metaThemeColor.setAttribute("content", "#be123c");
+   } else {
+      // changed to light mode
+      let metaThemeColor = document.querySelector("meta[name=theme-color]");
+      metaThemeColor.setAttribute("content", "#fecdd3");
+   }
+});
+
+// Theme is dark by default
+if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+   let metaThemeColor = document.querySelector("meta[name=theme-color]");
+   metaThemeColor.setAttribute("content", "#be123c");
+}
+
+
 function openModal(modal) {
    document.querySelector(`.modal-${modal}`).classList.add("modal-open");
 }
@@ -402,9 +424,7 @@ function closeModal(modal) {
 }
 
 function notify(txt, alertTxt) {
-   navigator.clipboard.writeText(txt).then(() => {
-       console.log("Copied!");
-   }, () => { console.log("Error copying."); });
+   navigator.clipboard.writeText(txt).catch(() => { console.error("Error copying."); });
    let alert = document.createElement("DIV");
    alert.textContent = `Copied ${alertTxt}!`;
    alert.classList.add("tempAlert");
@@ -420,7 +440,6 @@ function notify(txt, alertTxt) {
    setTimeout(() => {
       alert.remove();
    }, 4400);
-
 }
 
 // Settings
