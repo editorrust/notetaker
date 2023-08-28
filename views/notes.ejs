@@ -21,31 +21,39 @@
 </head>
 <body>
    <div class="display">
+      <!-- Sidebar -->
       <div class="note-sidebar">
          <div class="menu">
+            <!-- Menu buttons -->
             <div class="menu-buttons">
-               <button onclick="newNote()" class="rounded-tr-2xl rounded-tl-full rounded-bl-full" title="new note"><span class="material-symbols-rounded">note_stack_add</span></button>
-               <button onclick="toggleNotebookSwitcher()" title="change active notebook"><span class="material-symbols-rounded">folder_managed</span></button>
-               <button onclick="openModal('newnotebook')" title="new notebook"><span class="material-symbols-rounded">create_new_folder</span></button>
+               <button onclick="newNote()" onmouseenter="hideNotebookSwitcher()" class="rounded-tr-2xl rounded-tl-full rounded-bl-full" title="new note"><span class="material-symbols-rounded">note_stack_add</span></button>
+               <button onmouseenter="toggleNotebookSwitcher()" title="change active notebook / new notebook"><span class="material-symbols-rounded">folder_managed</span></button>
+               <button onclick="openModal('deletednotes'); showDeletedNotes()" onmouseenter="hideNotebookSwitcher()" title="view deleted notes"><span class="material-symbols-rounded">delete</span></button>
                <button onclick="openModal('settings')" title="settings"><span class="material-symbols-rounded">settings</span></button>
                <button onclick="openModal('info')" class="rounded-tl-sm rounded-tr-full rounded-br-full" title="program info"><span class="material-symbols-rounded">info</span></button>
             </div>
-            <div class="notebook-switcher hidden m-2 -mb-4 p-2 rounded-md bg-greyplus-darkwhite dark:bg-greyplus-tar">
-               <h2 class="font-semibold ml-1">Notebooks</h2>
-               <div class="notebook-list"></div>
+            <!-- Notebook switcher -->
+            <div class="notebook-switcher p-2 pt-1" onmouseleave="hideNotebookSwitcher()">
+               <div class="p-2 rounded-md bg-greyplus-darkwhite dark:bg-greyplus-tar">
+                  <button class="float-right" id="newnotebookbutton" onclick="openModal('newnotebook')" title="new notebook"><span class="material-symbols-rounded">create_new_folder</span></button>
+                  <h2 class="text-2xl font-semibold ml-1">Notebooks</h2>
+                  <div class="notebook-list"></div>
+               </div>
             </div>
+            <!-- Searchbar -->
             <div class="searchbar-parent px-2">
                <input class="searchbar my-2 px-3 py-1.5 text-xl block w-full rounded-lg bg-greyplus-darkwhite dark:bg-greyplus-tar focus:outline-none" type="text" placeholder="search in notebook" onkeyup="search(event)">
             </div>
          </div>
+         <!-- Search menu and note list -->
          <div class="search-menu"></div>
          <div class="note-list"></div>
       </div>
+      <!-- Active note -->
       <div class="active-note">
          <div class="active-note-header">
             <div contenteditable="true" class="note-name"></div>
             <span class="material-symbols-rounded copynoteid" title="Copy note id" onclick="copyNoteId()">integration_instructions</span>
-            <span class="material-symbols-rounded toggle-wordcount" title="Toggle word count" onclick="toggleWordCount()">tag</span>
             <span class="material-symbols-rounded delete-note" title="Delete note">delete</span>
          </div>
          <div class="active-note-content">
@@ -85,7 +93,7 @@
          <div class="modal-content">
             <h2>Notes</h2>
             <p>A simple markdown notes program</p>
-            <p>The security for this app is terrible. The notes are stored in plaintext, so I can see them, and I occasionally leak the database password, so pontentially everyone could see them.</p>
+            <p>The security is terrible. The notes are stored in plaintext, so I can see them, and I occasionally leak the database password, so pontentially everyone could see them.</p>
             <br>
             <h2>Citations</h2>
             <p>Unordered list markdown code from https://chubakbidpaa.com/interesting/2021/09/28/regex-for-md.html - Thank you!</p>
@@ -95,6 +103,7 @@
             <br>
             <h2>Version</h2>
             <p></p>
+            <p>v0.6.0 -> Search notebook, fixed auto list item, fixed newline issue <i>- Aug 28</i></p>
             <p>v0.5.0 -> Save settings (font, autocomplete, active notebook) locally, auto newline/brackets, removed home page <i>- Aug 27 2023</i></p>
             <p>v0.4.2 -> reduced data sent recived from server for notebooks <i>- Aug 26 2023</i></p>
             <p>v0.4.1 -> stored secrects in env file <i>- Aug 22 2023</i></p>
@@ -105,7 +114,7 @@
             <p>v0.1.0 -> basic markdown, local save, create, edit, delete notes <i>- July 31 2023</i></p>
             <br>
             <i>Made by Hamza Nasher-Alneam</i>
-            <p>Last edit August 26 2023</p>
+            <p>Last edit August 28 2023</p>
          </div>
       </div>
    </div>
@@ -144,6 +153,12 @@
                <label for="braces">Braces {}</label><br>
             </div>
             <br>
+            <h2>Word count</h2>
+            <div class="my-2">
+               <input onclick="wordCountToggled()" checked type="checkbox" class="toggle float-right" id="wordcount" name="wordcount">
+               <label for="wordcount">Word count</label><br>
+            </div>
+            <br>
             <h2>Change font</h2>
             <p>Change the global font</p>
             <button onclick="changeFont('serif')">Serif</button>
@@ -156,9 +171,23 @@
          </div>
       </div>
    </div>
+
+   <div class="modal modal-deletednotes">
+      <div class="modal-inner deletednotes">
+         <p class="close-modal" onclick="closeModal('deletednotes')">x</p>
+         <h1>Deleted notes</h1>
+         <hr>
+         <div class="modal-content">
+            <p>Here are your deleted notes from all your notebooks.</p>
+            <p>These are saved locally, so they will not be available to other browsers or computers</p>
+            <div class="deletednotes"></div>
+         </div>
+      </div>
+   </div>
 </body>
 <script src="scripts/main.js"></script>
 <script src="scripts/markdown.js"></script>
 <script src="scripts/autocomplete.js"></script>
 <script src="scripts/search.js"></script>
+<script src="scripts/settings.js"></script>
 </html>

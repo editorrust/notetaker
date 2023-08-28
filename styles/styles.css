@@ -104,9 +104,8 @@ button:hover {
 
 .note-name {
    width: 100%;
-   min-height: 1em;
    display: inline-block;
-   font-size: 2em;
+   font-size: 1.6em;
 }
 
 .note-content {
@@ -116,7 +115,7 @@ button:hover {
    font-size: 1.1em;
 }
 
-.note-content * {
+.note-content {
    white-space: pre-wrap;
    word-break: break-all;
    overflow-wrap: break-word;
@@ -145,14 +144,14 @@ button:hover {
    transform: scale(.9);
 }
 
-.toggle-wordcount {
+/* .otherquicksetting {
    background-color: #6495ed;
-   right: 2.2em;
-}
+   right: 4.4em;
+} */
 
 .copynoteid {
    background-color: #4acb84;
-   right: 4.4em;
+   right: 2.2em;
 }
 
 /* Search menu */
@@ -195,17 +194,35 @@ button:hover {
 /* Note list */
 
 .note-sidebar {
+   max-height: 100vh;
+   overflow: scroll;
    background-color: var(--menu-color);
    border-right: solid .15em var(--menu-border-color);
 }
 
-.menu-buttons {
-   background-color: var(--darkest-background);
+.menu {
+   position: relative;
 }
 
 .menu-buttons {
+   background-color: var(--darkest-background);
    display: flex;
    justify-content: center;
+   position: sticky;
+   top: 0;
+}
+
+#newnotebookbutton {
+   margin: 0;
+   padding: .3em .4em 0 .4em;
+}
+
+.notebook-switcher {
+   position: absolute;
+   width: 100%;
+   opacity: 0;
+   pointer-events: none;
+   transition: .2s;
 }
 
 .note-sidebar button {

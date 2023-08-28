@@ -1,7 +1,7 @@
 {
-  "name": "thisoffice",
+  "name": "notetaker",
   "version": "0.2.1",
-  "description": "Office work tools",
+  "description": "Markdown notetaker",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/editorrust/thisoffice.git"
+    "url": "git+https://github.com/editorrust/notetaker.git"
   },
   "author": "Hamza Nasher-Alneam",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/editorrust/thisoffice/issues"
+    "url": "https://github.com/editorrust/notetaker/issues"
   },
-  "homepage": "https://github.com/editorrust/thisoffice#readme",
+  "homepage": "https://github.com/editorrust/notetaker#readme",
   "dependencies": {
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",

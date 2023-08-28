@@ -63,8 +63,6 @@ function getNewpageData() {
    }).catch((err) => { console.error(err); });
 }
 
-getNewpageData();
-
 
 /* ==================
 // Pages
@@ -95,7 +93,6 @@ function signOut() {
 function signIn(user) {
    signedin = true;
    currentuser = user;
-   console.log("Just signed in: ", user)
 }
 
 
@@ -173,7 +170,18 @@ app.post("/note-edit", (req, res) => {
 
 app.get("/newnotebook", (req, res) => {
    if (!signedin) { res.render("partials/signedOut"); return; }
-   createNotebook(decodeURIComponent(req.query.name), res);
+   let id = uuidv4();
+   Users.findOneAndUpdate(
+      { userid: currentuser.userid },
+      { $push: { notebooks: {
+         title: decodeURIComponent(req.query.name),
+         id: id,
+         dateCreated: new Date(),
+         notes: []
+      } } },
+   ).then((user) => {
+      res.send(id);
+   }).catch((err) => { console.error(err); });
 });
 
 app.get("/notebook-delete", (req, res) => {
@@ -188,28 +196,12 @@ app.get("/notebook-delete", (req, res) => {
 });
 
 
-function createNotebook(title, res) {
-   let id = uuidv4();
-   Users.findOneAndUpdate(
-      { userid: currentuser.userid },
-      { $push: { notebooks: {
-         title: title,
-         id: id,
-         dateCreated: new Date(),
-         notes: []
-      } } },
-   ).then((user) => {
-      let notebook = user.notebooks.find(notebook => notebook.id == id);
-      res.send(notebook);
-   }).catch((err) => { console.error(err); });
-}
-
-
 /* ==================
 // Get data
 ================== */
 
 app.get("/getnotebooks", (req, res) => {
+   console.log(currentuser, signedin);
    Users.findOne(
       { userid: currentuser.userid }
    ).then((user) => {

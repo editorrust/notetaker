@@ -27,7 +27,6 @@ function parseMarkdown(text) {
       let items = "";
       fullMatch.trim().split('\n').forEach( item => {
          let checked = (item[2] === "[" && item[3] === "x") ? "checked" : "unchecked";
-         // console.log(checked, item[3])
 
          let id = crypto.randomUUID();
          items += `<li data-state="${checked}" onclick="changeClickState()" classlist="${checked ? "done" : ""}"><input id="id-${id}" type="checkbox"/><label for="${id}" class="tick"></label><span>${item.substring(item.indexOf("]") + 1)}</span></li>`;
@@ -75,12 +74,12 @@ function parseMarkdown(text) {
    // links
    result = result.replace(/\[(.*?)\]\((.*?)\)/g, "<a class='underline text-blue-700' href='$2' title='$2'>$1</a>");
    // headers
-   result = result.replace(/###### (.*?)(?:<br>|$)/gm, "<h6>$1</h6>");
-   result = result.replace(/##### (.*?)(?:<br>|$)/gm, "<h5>$1</h5>");
-   result = result.replace(/#### (.*?)(?:<br>|$)/gm, "<h4>$1</h4>");
-   result = result.replace(/### (.*?)(?:<br>|$)/gm, "<h3>$1</h3>");
-   result = result.replace(/## (.*?)(?:<br>|$)/gm, "<h2>$1</h2>");
-   result = result.replace(/# (.*?)(?:<br>|$)/gm, "<h1>$1</h1>");
+   result = result.replace(/###### (.*?)(?:<br>|$)/g, "<h6>$1</h6>");
+   result = result.replace(/##### (.*?)(?:<br>|$)/g, "<h5>$1</h5>");
+   result = result.replace(/#### (.*?)(?:<br>|$)/g, "<h4>$1</h4>");
+   result = result.replace(/### (.*?)(?:<br>|$)/g, "<h3>$1</h3>");
+   result = result.replace(/## (.*?)(?:<br>|$)/g, "<h2>$1</h2>");
+   result = result.replace(/# (.*?)(?:<br>|$)/g, "<h1>$1</h1>");
    // horizontal rule
    result = result.replace(/---/g, "<hr>");
 
