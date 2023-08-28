@@ -35,17 +35,17 @@ getData();
 
 async function getData() {
    await getNotebooks();
-   if (settings.activeNotebook == "not set") {
+   if (settings.activeNotebook == "not set" || notebooks.findIndex(notebook => notebook.id == settings.activeNotebook) == -1) {
       settings.activeNotebook = notebooks[0].id;
       saveSettings();
    }
    updateNotebookList();
-   console.log(notebooks)
    await getNotes(settings.activeNotebook);
    if (notes.length == 0) {
       newNote();
       return;
    }
+   updateNoteList();
 
    showLatestNote();
 }
@@ -64,11 +64,15 @@ async function getNotebooks() {
 async function getNotes(notebookid) {
    try {
       const response = await fetch(`/getnotes?notebookid=${notebookid}`);
+      if (!response.ok) {
+        console.error(`Request failed with status ${response.status}`);
+        return;
+      }
       const data = await response.json();
       notes = data;
-   } catch (error) {
-      console.error(error);
-   }
+    } catch (error) {
+      console.error('there was an error:', error);
+    }
 }
 
 
@@ -273,17 +277,16 @@ async function newNotebook() {
    form.name.value = "";
 
    const response = await fetch(`/newnotebook?name=${encodeURIComponent(name)}`);
-   if (!response.ok) {
-      console.error(`Request failed with status ${response.status}`);
-      return;
-   }
 
    try {
-      const notebookid = await response.json();
-      // console.log(response, response.json());
+      const notebookid = await response.text();
       settings.activeNotebook = notebookid;
       saveSettings();
-      getData();
+      getData().then(() => {
+         updateNoteList();
+      }).catch(err => {
+         console.error(err);
+      });
    }
    catch (error) {
       console.error(error);
@@ -296,15 +299,13 @@ async function deleteNotebook(id) {
    let confirmation = confirm("Are you sure you want to delete this notebook?");
    if (!confirmation) return;
 
-   const response = await fetch(`/notebook-delete?notebookid=${encodeURIComponent(id)}`);
-   const notebook = await response.json();
-
-   await getNotebooks();
-   if (settings.activeNotebook == "not set" || settings.activeNotebook == id) {
-      settings.activeNotebook = notebooks[0].id;
-      saveSettings();
+   if (notebooks.length == 1) {
+      notify("You can't delete your last notebook!");
+      return;
    }
-   updateNotebookList();
+
+   const response = await fetch(`/notebook-delete?notebookid=${encodeURIComponent(id)}`);
+   getData();
 }
 
 function openNotebook(id) {

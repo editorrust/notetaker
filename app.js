@@ -122,7 +122,6 @@ app.get("/note-create", (req, res) => {
    });
 });
 
-
 app.post("/note-delete", (req, res) => {
    if (!signedin) { res.render("partials/signedOut"); return; }
    Users.findById(currentuser._id).then(user => {
@@ -201,7 +200,7 @@ app.get("/notebook-delete", (req, res) => {
 ================== */
 
 app.get("/getnotebooks", (req, res) => {
-   console.log(currentuser, signedin);
+   if (!signedin) { res.render("partials/signedOut"); return; }
    Users.findOne(
       { userid: currentuser.userid }
    ).then((user) => {
@@ -215,6 +214,7 @@ app.get("/getnotebooks", (req, res) => {
 });
 
 app.get("/getnotes", (req, res) => {
+   if (!signedin) { res.render("partials/signedOut"); return; }
    Users.findOne(
       { userid: currentuser.userid }
    ).then((user) => {
@@ -265,10 +265,10 @@ app.post("/user/create", (req, res) => {
                   });
                   newUser.save().catch(err => console.error(err));
                   sendEmail(
-                     "💼 Your This Office account has been created",
+                     "Your Notetaker account has been created",
                      `<h2>Yes!</h2>
-                     <h4>💼 Your This Office account has been created</h4>
-                     <p>Your This Office account (${req.body.name}) has been created. Your data is not encrypted and can be viewed by me or anyone else who has access to the database password, which I leak occasionally. Enjoy your account!</p>
+                     <h4>Your Notetaker account has been created</h4>
+                     <p>Your Notetaker account (${req.body.name}) has been created. Your data is not encrypted and can be viewed by me or anyone else who has access to the database password, which I leak occasionally. Enjoy your account!</p>
                      <i>Editor Rust :)</i>
                      <p>vegetabledash@gmail.com</p>`,
                      req.body.emil
