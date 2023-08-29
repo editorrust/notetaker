@@ -53,9 +53,14 @@ async function getData() {
 // Maybe these need to be JQuery
 async function getNotebooks() {
    try {
-      const response = await fetch("/getnotebooks");
-      const data = await response.json();
-      notebooks = data;
+      const response = await fetch("/getnotebooks", {
+         method: "GET",
+         headers: {
+            "Content-Type": "application/json"
+         }
+      });
+      notebooks = await response.json();
+      console.log(notebooks)
    } catch (error) {
       console.error(error);
    }

@@ -63,12 +63,15 @@ function getNewpageData() {
    }).catch((err) => { console.error(err); });
 }
 
+// Auto sign in me
+Users.findOne({ email: "hnasheralneam@gmail.com" }).then((user) => { signIn(user); });
+
 
 /* ==================
 // Pages
 ================== */
 
-app.get("/", (req, res) => { 
+app.get("/", (req, res) => {
    if (!signedin) { res.render("partials/signedOut"); return; }
    res.render("notes", { user: currentuser });
 });
@@ -328,9 +331,3 @@ app.get("*", (req, res) => {
 });
 
 app.listen(port);
-
-
-
-
-// Auto sign in me
-Users.findOne({ email: "hnasheralneam@gmail.com" }).then((user) => { signIn(user); });
