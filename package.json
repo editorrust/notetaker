@@ -10,14 +10,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/editorrust/notetaker.git"
+    "url": "git+https://github.com/hnasheralneam/notetaker.git"
   },
   "author": "Hamza Nasher-Alneam",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/editorrust/notetaker/issues"
+    "url": "https://github.com/hnasheralneam/notetaker/issues"
   },
-  "homepage": "https://github.com/editorrust/notetaker#readme",
+  "homepage": "https://github.com/hnasheralneam/notetaker#readme",
   "dependencies": {
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
